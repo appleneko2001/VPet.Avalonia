@@ -33,7 +33,9 @@ directory, too.
 [VPetSimulator github repository (extract the folder VPet-Simulator.Windows from source archive)](https://github.com/LorisYounger/VPet). It requires approx. 700 MiB (or might even more).
 - Copy the `mod` folder from the game to the folder `<game-root-folder>/VPetSimulator`
 
+
 <!--
+For some reason i cant continue this work until i have back from important things done
 # FAQ (frequently asked questions)
 > TODO
 -->

@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dialogs="clr-namespace:VPet.Avalonia.ViewModels.Dialogs"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="VPet.Avalonia.Views.Windows.MessageBoxDialogWindow"
+        Title="{Binding Title}"
+        MinWidth="160"
+        MinHeight="80"
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="WidthAndHeight"
+        MaxWidth="1000">
+    <Window.DataContext>
+        <dialogs:MessageBoxDialogViewModel/>
+    </Window.DataContext>
+    
+    <StackPanel Spacing="8">
+        <ScrollViewer>
+            <SelectableTextBlock Text="{Binding SupportingText}"
+                                 TextWrapping="Wrap"/>
+        </ScrollViewer>
+        
+        <Menu HorizontalAlignment="Right">
+            <!--
+<Button Content="Button 1" Command="{Binding OnClickButton}"/>
+-->
+            <MenuItem Header="Button 1"
+                      Command="{Binding OnClickButton}"/>
+        </Menu>
+    </StackPanel>
+</Window>

@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia.Headless.NUnit" Version="11.0.4" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2"/>
+        <PackageReference Include="NUnit" Version="3.13.3"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="4.2.1"/>
+        <PackageReference Include="NUnit.Analyzers" Version="3.3.0"/>
+        <PackageReference Include="coverlet.collector" Version="3.1.2"/>
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Reference Include="Avalonia.Base">
+        <HintPath>..\..\..\..\home\appleneko2001\.nuget\packages\avalonia\11.0.4\ref\net6.0\Avalonia.Base.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\VPet.Avalonia\VPet.Avalonia.csproj" />
+    </ItemGroup>
+
+
+
+</Project>

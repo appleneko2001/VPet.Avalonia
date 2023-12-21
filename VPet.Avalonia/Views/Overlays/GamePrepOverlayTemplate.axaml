@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:overlays="clr-namespace:VPet.Avalonia.ViewModels.Overlays">
+    <!-- Add Resources Here -->
+    <DataTemplate x:Key="GamePrepOverlayTemplate"
+                  DataType="{x:Type overlays:GamePrepViewModel}">
+        <Border Background="#80A0C0FF"
+                BorderBrush="#A0C0FF"
+                BorderThickness="1"
+                Padding="4">
+            <TextBlock TextWrapping="Wrap"
+                       Text="{Binding Text}"/>
+        </Border>
+    </DataTemplate>
+</ResourceDictionary>

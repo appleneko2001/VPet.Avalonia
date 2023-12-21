@@ -1,0 +1,82 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Add Resources Here -->
+    <ControlTheme x:Key="PetWidgetMenuItem"
+                  TargetType="{x:Type MenuItem}">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
+        <Setter Property="Height" Value="24"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="PART_RootBorder"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                    <Panel Name="PART_RootPanel">
+                        <Border Name="BorderLayer"
+                                CornerRadius="{TemplateBinding CornerRadius}"/>
+                        
+                        <Grid Name="HeaderPanel"
+                              ColumnDefinitions="Auto, *">
+                            <ContentControl Grid.Column="0"
+                                            Name="IconPresenter"
+                                            Content="{TemplateBinding Icon}"
+                                            Theme="{TemplateBinding ItemContainerTheme}"
+                                            IsVisible="{TemplateBinding
+                                          Converter={x:Static ObjectConverters.IsNotNull},
+                                          Property=Icon}"/>
+                        
+                            <ContentPresenter Grid.Column="1"
+                                              Name="HeaderPresenter"
+                                              Content="{TemplateBinding Header}"
+                                              ContentTemplate="{TemplateBinding HeaderTemplate}"/>
+                        </Grid>
+                        
+                        <Popup Name="Popup"
+                               IsLightDismissEnabled="False"
+                               IsOpen="{TemplateBinding IsSubMenuOpen,
+                                            Mode=TwoWay}">
+                            <Border Background="{DynamicResource ThemeBackgroundBrush}"
+                                    BorderBrush="{DynamicResource ThemeBorderMidBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ScrollViewer Theme="{StaticResource SimpleMenuScrollViewer}">
+                                    <ItemsPresenter Name="PART_ItemsPresenter"
+                                                    Grid.IsSharedSizeScope="True"
+                                                    ItemsPanel="{TemplateBinding ItemsPanel}" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Panel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+        
+        <Style Selector="^ /template/ ContentControl#IconPresenter">
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+        
+        <Style Selector="^ /template/ Popup#Popup">
+            <Setter Property="PlacementAnchor" Value="Top"/>
+        </Style>
+        
+        <Style Selector="^ /template/ ContentPresenter#HeaderPresenter">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        
+        <Style Selector="^ /template/ Grid#HeaderPanel">
+            <Setter Property="Margin" Value="4,0"/>
+        </Style>
+        
+        <!-- Feedbacks -->
+        <Style Selector="^ /template/ Border#BorderLayer">
+            <Setter Property="Background" Value="{x:Null}"/>
+        </Style>
+        
+        <Style Selector="^:pointerover /template/ Border#BorderLayer">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}"/>
+        </Style>
+        
+        <Style Selector="^:selected /template/ Border#BorderLayer">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

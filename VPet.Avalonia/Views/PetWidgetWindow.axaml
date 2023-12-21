@@ -1,0 +1,108 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:VPet.Avalonia.ViewModels"
+        xmlns:controls="clr-namespace:VPet.Avalonia.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="VPet.Avalonia.Views.PetWidgetWindow"
+        Title="PetWidgetWindow"
+        
+        TransparencyBackgroundFallback="Black"
+        ExtendClientAreaChromeHints="NoChrome"
+        SystemDecorations="None"
+        Background="{x:Null}"
+        ShowInTaskbar="False"
+        WindowState="Normal"
+        
+        x:DataType="viewModels:PetWidgetViewModel"
+        
+        PointerEntered="OnPointerEnteredToWindow"
+        PointerExited="OnPointerExitedFromWindow">
+    <Window.DataContext>
+        <viewModels:PetWidgetViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://VPet.Avalonia/Views/Overlays/GamePrepOverlayTemplate.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Panel>
+        <controls:SpriteSheetPlayer SpriteSheet="{Binding Sprites}"
+                                    Index="{Binding Index, Mode=TwoWay}"
+                                    IsPlaying="{Binding IsPlaying, Mode=TwoWay}"
+                                    IsRepeat="{Binding IsRepeat}"
+                                    Width="{Binding WidgetSize}"
+                                    Height="{Binding WidgetSize}"
+                                    SpeedMultiplier="1.0"
+                                    ReachToEnd="SpriteSheetPlayer_OnReachToEnd"
+                                    PointerPressed="Player_OnPointerPressed"
+                                    PointerMoved="Player_OnPointerMoved"
+                                    PointerReleased="Player_OnPointerReleased"/>
+        
+        <!-- Game prepare status overlay -->
+        <ContentControl IsVisible="{Binding Converter={x:Static ObjectConverters.IsNotNull},
+                           Path=GamePrepOverlay}" 
+                        Content="{Binding GamePrepOverlay}"
+                        ContentTemplate="{StaticResource GamePrepOverlayTemplate}"
+                        VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Center"/>
+        
+        <Border CornerRadius="4"
+                ClipToBounds="True"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Center">
+            <StackPanel>
+                <Border IsVisible="{Binding IsOpenStatusPanel}"
+                        Background="{DynamicResource ThemeBackgroundBrush}">
+                    <StackPanel MinWidth="240">
+                        <TextBlock Text="Lv.??"/>
+                        
+                        <TextBlock Text="Pocket: 100.00$"/>
+                        <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto, Auto">
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="EXP"/>
+                            <ProgressBar Grid.Column="1" Grid.Row="0" Value="0.8" Maximum="1"/>
+                            
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Mood"/>
+                            <ProgressBar Grid.Column="1" Grid.Row="1" Value="0.8" Maximum="1"/>
+                            
+                            <TextBlock Grid.Column="0" Grid.Row="2" Text="Hungry"/>
+                            <ProgressBar Grid.Column="1" Grid.Row="2" Value="0.8" Maximum="1"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                
+                <Menu VerticalAlignment="Bottom"
+                      Opacity="{Binding ToolbarOpacity}">
+                    <Menu.Styles>
+                        <Style Selector="Menu > MenuItem">
+                            <Setter Property="Theme" Value="{StaticResource PetWidgetMenuItem}"/>
+                        </Style>
+                    </Menu.Styles>
+                    <MenuItem Header="Feed"></MenuItem>
+                    <MenuItem Header="Status" Name="StatusMenuItem">
+                        <MenuItem.Styles>
+                            <Style Selector="MenuItem">
+                                <Setter Property="SelectingItemsControl.IsSelected" Value="{Binding IsOpenStatusPanel, Mode=TwoWay}"/>
+                            </Style>
+                        </MenuItem.Styles>
+                    
+                    </MenuItem>
+                    <MenuItem Header="Tasks">
+                        <MenuItem Header="Sleep" Command="{Binding  Sleep}"/>
+                        <MenuItem Header="Study"/>
+                        <MenuItem Header="Play"/>
+                        <MenuItem Header="Work"/>
+                    </MenuItem>
+                    <MenuItem Header="Options">
+                        <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
+                    </MenuItem>
+                    <MenuItem Header="TouchHead" Command="{Binding  TouchHead}"/>
+                    <MenuItem Header="TouchBody" Command="{Binding  TouchBody}"/>
+                </Menu>
+            </StackPanel>
+        </Border>
+    </Panel>
+</Window>

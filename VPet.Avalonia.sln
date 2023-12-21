@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPet.Avalonia", "VPet.Avalonia\VPet.Avalonia.csproj", "{F86CCA82-AA26-422B-928E-2714B406F6CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPet.Avalonia.Linux", "VPet.Avalonia.Linux\VPet.Avalonia.Linux.csproj", "{7AB65E0A-63B6-4C61-80FB-16C79618E246}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPet.Avalonia.Test", "VPet.Avalonia.Test\VPet.Avalonia.Test.csproj", "{564DD550-5FC2-4113-A2FC-6D0C8B83BA1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPet.Avalonia.Providers.VPetSimulator", "VPet.Avalonia.Providers.VPetSimulator\VPet.Avalonia.Providers.VPetSimulator.csproj", "{2BB2C65E-6D84-42FF-AB20-9005C4F72BF4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F86CCA82-AA26-422B-928E-2714B406F6CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F86CCA82-AA26-422B-928E-2714B406F6CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F86CCA82-AA26-422B-928E-2714B406F6CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F86CCA82-AA26-422B-928E-2714B406F6CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AB65E0A-63B6-4C61-80FB-16C79618E246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB65E0A-63B6-4C61-80FB-16C79618E246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB65E0A-63B6-4C61-80FB-16C79618E246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB65E0A-63B6-4C61-80FB-16C79618E246}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564DD550-5FC2-4113-A2FC-6D0C8B83BA1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564DD550-5FC2-4113-A2FC-6D0C8B83BA1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BB2C65E-6D84-42FF-AB20-9005C4F72BF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BB2C65E-6D84-42FF-AB20-9005C4F72BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BB2C65E-6D84-42FF-AB20-9005C4F72BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BB2C65E-6D84-42FF-AB20-9005C4F72BF4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

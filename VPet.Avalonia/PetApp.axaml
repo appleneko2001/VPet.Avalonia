@@ -1,0 +1,33 @@
+<Application xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModels="clr-namespace:VPet.Avalonia.ViewModels"
+        x:Class="VPet.Avalonia.PetApp">
+    
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://VPet.Avalonia/Views/Themes/UIThemeIncludes.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+    <Application.Styles>
+        <SimpleTheme />
+    </Application.Styles>
+    <Application.DataContext>
+        <viewModels:PetAppViewModel/>
+    </Application.DataContext>
+    <TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="/Assets/avalonia-logo.ico">
+                <TrayIcon.Menu>
+                    <NativeMenu >
+                        <NativeMenuItem Header="Ignore input" ToggleType="CheckBox"
+                                        IsChecked="{Binding HitThroughEnabled}"
+                                        Command="{Binding OnSwitchHitThroughEnabled}"/>
+                        <NativeMenuItem Header="Exit" Command="{Binding ExitCommand}"/>
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
+</Application>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <Version>0.0.0</Version>
+        <Title>VPet.Avalonia Module (VPetSimulator Core)</Title>
+        <Authors>github@appleneko2001</Authors>
+        <Description>an translation-layer for VPet.Avalonia, which used for supports VPet-Simulator assets, auto-compositing and integrating external features to VPet.Avalonia (unofficial). The base game assets are acquired for properly working this module. Please download it from https://store.steampowered.com/app/1920960/VPetSimulator or https://github.com/LorisYounger/VPet.</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\VPet.Avalonia\VPet.Avalonia.csproj" />
+        <PackageReference Include="LinePutScript.Net"/>
+        <PackageReference Include="Avalonia" Version="11.0.4"/>
+    </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="VPet.Avalonia/PetApp.axaml" value="VPet.Avalonia.Linux/VPet.Avalonia.Linux.csproj" />
+        <entry key="VPet.Avalonia/Views/Overlays/GamePrepOverlayTemplate.axaml" value="VPet.Avalonia.Linux/VPet.Avalonia.Linux.csproj" />
+        <entry key="VPet.Avalonia/Views/PetWidgetWindow.axaml" value="VPet.Avalonia.Linux/VPet.Avalonia.Linux.csproj" />
+        <entry key="VPet.Avalonia/Views/ResizeSandboxWindow.axaml" value="VPet.Avalonia.Linux/VPet.Avalonia.Linux.csproj" />
+        <entry key="VPet.Avalonia/Views/SandboxWindow.axaml" value="VPet.Avalonia.Linux/VPet.Avalonia.Linux.csproj" />
+        <entry key="VPet.Avalonia/Views/Themes/Controls/MenuItem.axaml" value="VPet.Avalonia.Linux/VPet.Avalonia.Linux.csproj" />
+        <entry key="VPet.Avalonia/Views/Themes/Controls/ProgressBar.axaml" value="VPet.Avalonia.Linux/VPet.Avalonia.Linux.csproj" />
+        <entry key="VPet.Avalonia/Views/Themes/UIThemeIncludes.axaml" value="VPet.Avalonia.Linux/VPet.Avalonia.Linux.csproj" />
+        <entry key="VPet.Avalonia/Views/Themes/UIThemes.axaml" value="VPet.Avalonia.Linux/VPet.Avalonia.Linux.csproj" />
+        <entry key="VPet.Avalonia/Views/Windows/MessageBoxDialogWindow.axaml" value="VPet.Avalonia.Linux/VPet.Avalonia.Linux.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

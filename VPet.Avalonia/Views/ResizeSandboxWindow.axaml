@@ -1,0 +1,56 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="VPet.Avalonia.Views.ResizeSandboxWindow"
+        
+        Title="SandboxWindow">
+    <!-- Sandbox window -->
+    <!-- aka. the limit area where pet can do actions -->
+    <Window.Resources>
+        <ResourceDictionary>
+            <system:Double x:Key="AdjusterBorderThickness">8</system:Double>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Panel>
+        <Grid ColumnDefinitions="Auto, *, Auto"
+              RowDefinitions="Auto, *, Auto">
+            <!-- Horizontal sides -->
+            <Border Background="Aqua" Grid.Column="0" Grid.Row="1"
+                    Width="{StaticResource AdjusterBorderThickness}"
+                    Cursor="LeftSide"/>
+            <Border Background="Aqua" Grid.Column="2" Grid.Row="1"
+                    Width="{StaticResource AdjusterBorderThickness}"
+                    Cursor="RightSide"/>
+            
+            <!-- Vertical sides -->
+            <Border Background="Aqua" Grid.Column="1" Grid.Row="0"
+                    Height="{StaticResource AdjusterBorderThickness}"
+                    Cursor="TopSide"/>
+            <Border Background="Aqua" Grid.Column="1" Grid.Row="2"
+                    Height="{StaticResource AdjusterBorderThickness}"
+                    Cursor="BottomSide"/>
+            
+            <!-- Corners -->
+            <Border Background="Aqua" Grid.Column="0" Grid.Row="0"
+                    Width="{StaticResource AdjusterBorderThickness}"
+                    Height="{StaticResource AdjusterBorderThickness}"
+                    Cursor="TopLeftCorner"/>
+            <Border Background="Aqua" Grid.Column="2" Grid.Row="0"
+                    Width="{StaticResource AdjusterBorderThickness}"
+                    Height="{StaticResource AdjusterBorderThickness}"
+                    Cursor="TopRightCorner"/>
+            <Border Background="Aqua" Grid.Column="2" Grid.Row="2"
+                    Width="{StaticResource AdjusterBorderThickness}"
+                    Height="{StaticResource AdjusterBorderThickness}"
+                    Cursor="BottomRightCorner"/>
+            <Border Background="Aqua" Grid.Column="0" Grid.Row="2"
+                    Width="{StaticResource AdjusterBorderThickness}"
+                    Height="{StaticResource AdjusterBorderThickness}"
+                    Cursor="BottomLeftCorner"/>
+        </Grid>
+    </Panel>
+</Window>

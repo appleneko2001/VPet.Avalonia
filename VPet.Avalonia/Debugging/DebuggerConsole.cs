@@ -1,8 +1,10 @@
+using System.Drawing;
 using DynamicData;
+using Pastel;
 
 namespace VPet.Avalonia.Debugging;
 
-internal static class DebuggerConsole
+public static class DebuggerConsole
 {
     private static List<Type> IgnoreTypeList = new ();
     private static bool _enableDebug = false;
@@ -20,44 +22,70 @@ internal static class DebuggerConsole
         var type = source.GetType();
         IgnoreTypeList.Remove(type);
     }
-    
-    internal static void WriteLine(this object source, MessageSeverity level, string text)
+
+    public static void WriteLineLazy(this object source, MessageSeverity level, Func<string> getter)
+        => WriteLineLazy(source.GetType(), level, getter);
+
+    public static void WriteLineLazy(Type type, MessageSeverity level, Func<string> getter)
     {
         if(!_enableDebug)
-           return; 
+            return; 
         
-        var type = source.GetType();
         if (IgnoreTypeList.Contains(type))
             return;
         
-        switch (level)
-        {
-            case MessageSeverity.Debug:
-            case MessageSeverity.Verb:
-                Console.WriteLine(FormatTextPrivate(source, level, text));
-                break;
-            
-            case MessageSeverity.Info:
-                Console.WriteLine(FormatTextPrivate(source, level, text));
-                break;
-            
-            case MessageSeverity.Warn:
-                Console.WriteLine(FormatTextPrivate(source, level, text));
-                break;
-            
-            case MessageSeverity.Error:
-            case MessageSeverity.Severe:
-                Console.WriteLine(FormatTextPrivate(source, level, text));
-                break;
-            
-            default:
-                Console.WriteLine(FormatTextPrivate(source, level, text));
-                break;
-        }
+        PostWriteLinePrivate(type, level, getter());
     }
 
-    private static string FormatTextPrivate(object source, MessageSeverity level, string text)
+    public static void WriteLine(this object source, MessageSeverity level, string text) =>
+        WriteLine(source.GetType(), level, text);
+    
+    public static void WriteLine(Type type, MessageSeverity level, string text)
     {
-        return $"[{DateTime.Now}][{level.ToString()}][{source.GetType().Name}] {text}";
+        if(!_enableDebug)
+            return; 
+        
+        if (IgnoreTypeList.Contains(type))
+            return;
+
+        PostWriteLinePrivate(type, level, text);
+    }
+
+    private static void PostWriteLinePrivate(Type type, MessageSeverity level, string text)
+    {
+        var name = type
+            .GetCustomAttributes(typeof(DebuggerObjectNameAttribute), true)
+            .FirstOrDefault() is DebuggerObjectNameAttribute customNameSource ?
+            customNameSource.Name : type.Name;
+        var oldForeColour = Console.ForegroundColor;
+
+        Console.ForegroundColor = level switch
+        {
+            MessageSeverity.Debug or MessageSeverity.Verb => ConsoleColor.DarkCyan,
+            MessageSeverity.Info => ConsoleColor.White,
+            MessageSeverity.Warn => ConsoleColor.Yellow,
+            MessageSeverity.Error or MessageSeverity.Severe => ConsoleColor.Red,
+            _ => ConsoleColor.DarkRed
+        };
+        
+        var color = level switch
+        {
+            MessageSeverity.Debug => Color.DarkCyan,
+            MessageSeverity.Verb => Color.LightGreen,
+            MessageSeverity.Info => Color.White,
+            MessageSeverity.Warn => Color.GreenYellow,
+            MessageSeverity.Error => Color.OrangeRed,
+            MessageSeverity.Severe => Color.Red,
+            _ => Color.White
+        };
+        
+        Console.WriteLine(FormatTextPrivate(name, level, text).Pastel(color));
+
+        Console.ForegroundColor = oldForeColour;
+    }
+
+    private static string FormatTextPrivate(string sourceName, MessageSeverity level, string text)
+    {
+        return $"[{DateTime.Now}][{level.ToString()}][{sourceName}] {text}";
     }
 }

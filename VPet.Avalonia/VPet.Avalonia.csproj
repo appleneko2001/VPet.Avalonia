@@ -16,6 +16,7 @@
         <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.4" />
         <PackageReference Include="CityHash.Net" Version="1.0.1" />
         <PackageReference Include="statemachinenet" Version="1.0.0" />
+        <PackageReference Include="Pastel" Version="3.0.1" />
         <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
         <PackageReference Include="System.Text.Json" Version="7.0.3" />
     </ItemGroup>

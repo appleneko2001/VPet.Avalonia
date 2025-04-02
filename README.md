@@ -1,4 +1,19 @@
 > NVM THIS SPAGHETTI IS TOO WEIRD I CANT DO MUCH WORK ANYMORE, AT LEAST IT WORKING PARTIALLY LIKE 10%
+> 
+> To use it, simply `dotnet restore`, `dotnet run VPet.Avalonia.Linux` or `dotnet run VPet.Avalonia.Windows`
+> Dont forget install VPet-Simulator in steam before run, or at least you know where is the `mod` folder, create a folder 
+> `1920960_installation_path.txt`, write the `mod` parent folder location and save it.
+> 
+> For now this spaghetti supports:
+> + Startup animation
+> + Idle animation
+> + Sleep animation
+> + Drag-n-drop animation
+> + Application close animation
+> 
+> But too much works to do with it and im tired to trying how to make sequence chain parsing and a lot works to make it
+> not like a spaghetti
+> The only reason this repository exist is at least have Linux support, and an archive of my shit work :(
 
 # VPet.Avalonia
 A cross-platform virtual desktop pet application. Powered by avaloniaUI. Inspired by LorisYounger's VPet-Simulator.

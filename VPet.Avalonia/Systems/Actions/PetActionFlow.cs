@@ -3,6 +3,7 @@ using VPet.Avalonia.Debugging;
 using VPet.Avalonia.Interfaces;
 using VPet.Avalonia.Mutables;
 using VPet.Avalonia.Systems.Actions.Triggers;
+using VPet.Avalonia.Systems.Graphics;
 using VPet.Avalonia.Systems.Graphics.Queues;
 using VPet.Avalonia.Systems.Graphics.Sprites;
 using VPet.Avalonia.ViewModels;
@@ -20,10 +21,9 @@ public class PetActionFlow : MutableObject, IPetAction
     GfxSequenceQueue? IPetAction.CurrentQueue => CurrentQueue;
 
     private GfxSequenceQueue? _currentQueue;
-    
-    private readonly Func<SpriteSheetSequenceInfo> _stateIn;
-    private readonly Func<SpriteSheetSequenceInfo> _stateWithin;
-    private readonly Func<SpriteSheetSequenceInfo> _stateOut;
+
+    private IGfxSequenceUsage? _sequences;
+    private readonly Func<IGfxSequenceUsage> _sequencesAccess;
     private readonly Func<bool> _onLoopEnd;
     private readonly string _name;
 
@@ -37,13 +37,10 @@ public class PetActionFlow : MutableObject, IPetAction
 
     private readonly Queue<Action> _onOneLoopEndEventHandlers = new();
     
-    public PetActionFlow(string name, bool canInterrupted, Func<SpriteSheetSequenceInfo> stateIn, Func<SpriteSheetSequenceInfo> stateWithin, 
-        Func<SpriteSheetSequenceInfo> stateOut, Func<bool> onLoop)
+    public PetActionFlow(string name, bool canInterrupted, Func<IGfxSequenceUsage> sequenceAccess, Func<bool> onLoop)
     {
         _name = name;
-        _stateIn = stateIn;
-        _stateWithin = stateWithin;
-        _stateOut = stateOut;
+        _sequencesAccess = sequenceAccess;
         _onLoopEnd = onLoop;
         _canInterrupted = canInterrupted;
     }
@@ -64,9 +61,18 @@ public class PetActionFlow : MutableObject, IPetAction
         _cancellationToken = cancellationToken;
     }
 
+    public bool IsReady()
+    {
+        _sequences = _sequencesAccess();
+        return _sequences != null;
+    }
+
     public void Start()
     {
         _state = AnimationState.OnStart;
+        
+        if(_sequences == null)
+            _viewModel?.OnActionAnimationSequenceEnd(this);
     }
 
     public void OnUpdate(TimeSpan elapsed)
@@ -161,7 +167,7 @@ public class PetActionFlow : MutableObject, IPetAction
             {
                 return new GfxSequenceQueue
                 {
-                    Sequence = _stateIn(),
+                    Sequence = _sequences.GetStateIn(),
                     OnSequenceComplete = OnSequenceComplete_OnStart
                 };
             }
@@ -169,7 +175,7 @@ public class PetActionFlow : MutableObject, IPetAction
             {
                 return new GfxSequenceQueue
                 {
-                    Sequence = _stateWithin(),
+                    Sequence = _sequences.GetStateWithin(),
                     OnSequenceComplete = OnSequenceComplete_OnLoop
                 };
             }
@@ -177,7 +183,7 @@ public class PetActionFlow : MutableObject, IPetAction
             {
                 return new GfxSequenceQueue
                 {
-                    Sequence = _stateOut(),
+                    Sequence = _sequences.GetStateOut(),
                     OnSequenceComplete = OnSequenceComplete_OnEnd
                 };
             }
@@ -211,6 +217,7 @@ public class PetActionFlow : MutableObject, IPetAction
 
     private void OnReachEndPrivate()
     {
+        //_sequences = null;
         _viewModel?.OnActionAnimationSequenceEnd(this);
     }
 

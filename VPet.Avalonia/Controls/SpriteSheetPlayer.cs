@@ -103,7 +103,7 @@ public class SpriteSheetPlayer : Control
     /// Get a clock service that will be used for playback loop.
     /// </summary>
     private static ClockService ClockService => _clockServiceInst ??=
-        new ClockService(TimeSpan.FromMilliseconds(25));
+        new ClockService(TimeSpan.FromMilliseconds(10));
     
     private static ClockService? _clockServiceInst;
 
@@ -132,7 +132,7 @@ public class SpriteSheetPlayer : Control
         if(!IsPlaying)
             return;
         
-        var dMilli = delta.TotalMilliseconds;
+        var dMilli = delta.TotalMilliseconds * SpeedMultiplier;
 
         if (dMilli > 1000)
         {

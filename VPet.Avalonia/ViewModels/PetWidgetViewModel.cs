@@ -94,7 +94,7 @@ public class PetWidgetViewModel : ReactiveObject
     private double _toolbarOpacity;
 
     private readonly MutableStack<IPetAction> _actionsStack = new ();
-    private readonly Queue<GfxSequenceQueue> _queues = new ();
+    //private readonly Queue<GfxSequenceQueue> _queues = new ();
 
     private CancellationTokenSource _cancellationTokenSource = new ();
 
@@ -105,17 +105,28 @@ public class PetWidgetViewModel : ReactiveObject
         WidgetSize = 300;
         var mBus = EventBus.Current;
 
+        //mBus.Listen<PetActionAddMessage>(OnReceivePetActionAddMessage);
         mBus.Listen<GamePrepareTextMessage>(OnReceiveGamePrepareTextMessage);
         //mBus.Listen<PlaySequenceMessage>(OnReceivePlaySequenceMessage);
         mBus.Listen<StopViewModelMessage>(OnReceiveStopServiceMessage);
-        mBus.Listen<ClearNextSequenceMessage>(OnReceiveClearNextSequenceMessage);
+        //mBus.Listen<ClearNextSequenceMessage>(OnReceiveClearNextSequenceMessage);
         mBus.Listen<TryLetPetDoActionMessage>(OnReceiveTryLetPetDoActionMessage);
         WidgetPosition = PixelPoint.FromPoint(new Point(500, 500), 1);
     }
 
-    public void OnReceiveTryLetPetDoActionMessage(TryLetPetDoActionMessage msg) 
+    /*
+    private void OnReceivePetActionAddMessage(PetActionAddMessage msg)
     {
-        if (_actionsStack.TryPeek(out var latest) && latest == msg.Action)
+        
+    }*/
+
+    public void OnReceiveTryLetPetDoActionMessage(TryLetPetDoActionMessage msg)
+    {
+        var action = msg.Action;
+        if(!action.IsReady())
+            return;
+        
+        if (_actionsStack.TryPeek(out var latest) && latest == action)
         {
             if (latest.CurrentState == AnimationState.OnEnd)
             {
@@ -128,7 +139,7 @@ public class PetWidgetViewModel : ReactiveObject
 
         UnloadInterruptedActionsPrivate(null);
         
-        _actionsStack.Push(msg.Action);
+        _actionsStack.Push(action);
         TryPlayNextSequencePrivate();
     }
 
@@ -245,10 +256,11 @@ public class PetWidgetViewModel : ReactiveObject
         return sequence;
     }
 
+    /*
     private void OnReceiveClearNextSequenceMessage(ClearNextSequenceMessage obj)
     {
-        _queues.Clear();
-    }
+        //_queues.Clear();
+    }*/
 
     private void OnReceiveStopServiceMessage(StopViewModelMessage obj)
     {
@@ -336,7 +348,7 @@ public class PetWidgetViewModel : ReactiveObject
 
     private void TryPlayNextSequencePrivate()
     {
-        var nextQueue = !_queues.TryDequeue(out var next) ? GetCurrentQueuePrivate() : next;
+        var nextQueue = GetCurrentQueuePrivate();//!_queues.TryDequeue(out var next) ? GetCurrentQueuePrivate() : next;
         this.WriteLine(MessageSeverity.Debug, $"Play next sequence {nextQueue?.Sequence}");
         CurrentQueue = nextQueue;
     }

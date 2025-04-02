@@ -11,9 +11,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Steamworks.NET" Version="2024.8.0" />
         <ProjectReference Include="..\VPet.Avalonia\VPet.Avalonia.csproj" />
         <PackageReference Include="LinePutScript.Net"/>
-        <PackageReference Include="Avalonia" Version="11.0.4"/>
+        <PackageReference Include="Avalonia" Version="11.2.3" />
     </ItemGroup>
 
 

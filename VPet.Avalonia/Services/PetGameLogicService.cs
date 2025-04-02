@@ -10,6 +10,7 @@ using VPet.Avalonia.Options;
 using VPet.Avalonia.Services.Interfaces;
 using VPet.Avalonia.Systems;
 using VPet.Avalonia.Systems.Actions;
+using VPet.Avalonia.Systems.Graphics;
 using VPet.Avalonia.Systems.Graphics.Sprites;
 using VPet.Avalonia.ViewModels.Interfaces;
 
@@ -30,7 +31,7 @@ public class PetGameLogicService : ReactiveObject, IApplicationService, IPetStat
     
     private readonly CoreModuleService _coreModuleService;
     private readonly Random _random = new ();
-    private int _updateRateMilli = 1000 / 60;
+    private int _updateRateMilli = 1000 / 30;
 
     private readonly Dictionary<InteractPetActionKind, IPetAction> _petActions = new ();
 
@@ -69,7 +70,7 @@ public class PetGameLogicService : ReactiveObject, IApplicationService, IPetStat
         EventBus.Current.Listen<StopServiceMessage>(OnReceiveStopServiceMessage);
         EventBus.Current.Listen<InteractToPetMessage>(OnReceiveInteractToPetMessage);
 
-        PetState = PetState.Happy;
+        //PetState = PetState.Happy;
     }
 
     private void OnReceiveInteractToPetMessage(InteractToPetMessage msg)
@@ -145,6 +146,13 @@ public class PetGameLogicService : ReactiveObject, IApplicationService, IPetStat
                 _petActions[InteractPetActionKind.StartDrag].RequestTransitToEnd();
                 _petDragging = false;
                 _petDragMoving = false;
+                break;
+            
+            case InteractPetActionKind.Action:
+                EventBus.Current.Post(new TryLetPetDoActionMessage
+                {
+                    Action = _petActions[InteractPetActionKind.Action]
+                });
                 break;
         }
     }
@@ -226,7 +234,8 @@ public class PetGameLogicService : ReactiveObject, IApplicationService, IPetStat
                 continue;
             
             var sleep = _updateRateMilli - delta.TotalMilliseconds;
-            Thread.Sleep((int)sleep);
+            if(sleep > 0)
+                Thread.Sleep((int)sleep);
         }
         
         _stopwatch.Stop();
@@ -260,7 +269,7 @@ public class PetGameLogicService : ReactiveObject, IApplicationService, IPetStat
         var spriteCellSize = 500u;
         
         BroadcastGamePrepLoading("Loading core modules...");
-        _coreModuleService.LoadModules(PetApp.ApplicationRootPath);
+        _coreModuleService.LoadModules(PetApp.ApplicationRootPath, PetApp.ModPackPathCollection);
         
         BroadcastGamePrepLoading("Loading assets...");
         
@@ -278,7 +287,7 @@ public class PetGameLogicService : ReactiveObject, IApplicationService, IPetStat
         
         BroadcastGamePrepLoading("Loading sprites...");
         _gfxService.PreloadAllGfxSequences();
-        
+        //if(_gfxService.)
         BroadcastGamePrepLoading("Constructing animation sequences...");
         // Create common animation sequences collection. They will be used as common animations source and management.
         // It contains animations: "Startup", "Common idle", "State changing transition", "Shutdown"
@@ -330,13 +339,10 @@ public class PetGameLogicService : ReactiveObject, IApplicationService, IPetStat
 
     private void PrepareStateSystem()
     {
-        // Those thing should be within progress "construct animation sequences".
+        // TODO: Those thing should be within progress "construct animation sequences".
         // they are requires refactor work, too.
         _petActions.Add(InteractPetActionKind.TouchHead, 
-            new PetActionFlow("Pet head", true, 
-                () => GetActionGfxSequencePrivate(PetActivityState.TouchHead, GfxAnimationType.Start, false)!,
-                () => GetActionGfxSequencePrivate(PetActivityState.TouchHead, GfxAnimationType.Loop, false)!,
-                () => GetActionGfxSequencePrivate(PetActivityState.TouchHead, GfxAnimationType.End, false)!,
+            new PetActionFlow("Pet head", true, () => GetActionGfxSequenceGroupPrivate(PetActivityState.TouchHead)!,
                 () =>
                 {
                     if (!_petHeadRemains)
@@ -348,32 +354,26 @@ public class PetGameLogicService : ReactiveObject, IApplicationService, IPetStat
                 }));
         
         _petActions.Add(InteractPetActionKind.StartDrag, 
-            new PetActionFlow("Dragging pet", true, 
-                () => GetActionGfxSequencePrivate(PetActivityState.RaisedStatic, GfxAnimationType.Start, false)!,
-                () =>
-                {
-                    if (_petDragMoving == false)
-                        return GetActionGfxSequencePrivate(PetActivityState.RaisedStatic, GfxAnimationType.Loop,
-                            false)!;
+            new PetActionFlow("Dragging pet", true, () => 
+                new GfxSequenceGroupWeakRef(() => GetActionGfxSequencePrivate(PetActivityState.RaisedStatic, GfxAnimationType.Start, false)!,
+                    () =>
+                    {
+                        if (_petDragMoving == false)
+                            return GetActionGfxSequencePrivate(PetActivityState.RaisedStatic, GfxAnimationType.Loop,
+                                false)!;
                     
-                    var arr = _petDragMovesAnimations[PetState];
-                    return arr[_random.Next(0, arr.Count)];
-                },
-                () => GetActionGfxSequencePrivate(PetActivityState.RaisedStatic, GfxAnimationType.End, false)!,
+                        var arr = _petDragMovesAnimations[PetState];
+                        return arr[_random.Next(0, arr.Count)];
+                    },
+                    () => GetActionGfxSequencePrivate(PetActivityState.RaisedStatic, GfxAnimationType.End, false)!),
                 () => !_petDragging));
         
         _petActions.Add(InteractPetActionKind.Sleep,
-            new PetActionFlow("Sleep", false,
-                () => GetActionGfxSequencePrivate(PetActivityState.Sleep, GfxAnimationType.Start, true)!,
-                () => GetActionGfxSequencePrivate(PetActivityState.Sleep, GfxAnimationType.Loop, true)!,
-                () => GetActionGfxSequencePrivate(PetActivityState.Sleep, GfxAnimationType.End, true)!,
+            new PetActionFlow("Sleep", false, () => GetActionGfxSequenceGroupPrivate(PetActivityState.Sleep)!,
             () => !_petSleeping));
         
         _petActions.Add(InteractPetActionKind.TouchBody,
-            new PetActionFlow("Touch body", true,
-                () => GetActionGfxSequencePrivate(PetActivityState.TouchBody, GfxAnimationType.Start, true)!,
-                () => GetActionGfxSequencePrivate(PetActivityState.TouchBody, GfxAnimationType.Loop, true)!,
-                () => GetActionGfxSequencePrivate(PetActivityState.TouchBody, GfxAnimationType.End, true)!,
+            new PetActionFlow("Touch body", true, () => GetActionGfxSequenceGroupPrivate(PetActivityState.TouchBody)!,
                 () =>
                 {
                     if (!_touchBodyRemains)
@@ -413,6 +413,30 @@ public class PetGameLogicService : ReactiveObject, IApplicationService, IPetStat
 
         var group = groupEnumerable.ToImmutableArray();
         var i = _random.Next(0, group.Length);
+        return group[i];
+    }
+
+    private GfxSequenceGroup? GetActionGfxSequenceGroupPrivate(PetActivityState activity, bool random = true)
+    {
+        var groups = _gfxService!
+            .SearchSequenceGroup(a => a.Item1 == activity && a.Item2 == _state)
+            .ToImmutableArray();
+
+        if (groups.Length == 0)
+            return null;
+
+        if (!random)
+        {
+            var r = groups.FirstOrDefault();
+            r!.SetRandom(_random);
+            return r;
+        }
+
+        var group = groups.ToImmutableArray();
+        var i = _random.Next(0, group.Length);
+
+        var result = group[i];
+        result.SetRandom(_random);
         return group[i];
     }
 

@@ -40,12 +40,44 @@ public enum PetActivityState
     Idle1,
     Idle2,
     Sleep,
-    Say,
+    Speaking,
     Startup,
     Shutdown,
-    Work,
-    SwitchUp,
-    SwitchDown,
-    SwitchThirsty,
-    SwitchHunger
+    Activity,
+    StateUp,
+    StateDown,
+    StateThirsty,
+    StateHunger,
+    
+    /// Those entries is still not ready, they are just exist for further supporting yet
+    
+    /// Birthday
+    BirthDay,
+    
+    /// Not implemented 
+    Drink,
+    Eat,
+    Gift,
+    
+    LevelUp,
+    
+    /// Have some variants, still thinking how to do it lol
+    Dancing,
+    
+    /// why most assets entries have no standardised patterns
+    /// somehow they just related with LPS descriptor, and somehow they uses folder names as assets entries info
+    /// STHP -> (Startup, Happy)
+    /// STNM -> (Startup, Normal)
+    /// STUH -> (Startup, Poor)
+    /// IDELH -> (Idle, Happy)
+    /// IDELN -> (Idle, Normal)
+    /// IDELPC -> (Idle, Poor)
+    /// exist LPS try let module do parser info.lps
+    NewYear,
+    
+    /// I assume pinch is pull face 
+    PullFace,
+    
+    /// Have different loop sequences
+    Think,
 }

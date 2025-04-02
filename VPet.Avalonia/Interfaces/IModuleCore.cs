@@ -9,7 +9,7 @@ namespace VPet.Avalonia.Interfaces;
 /// </summary>
 public interface IModuleCore : IDisposable
 {
-    void Initialise(string rootPath);
+    void Initialise(string rootPath, IReadOnlyList<string> modPackPaths);
 
     void InitAssets(OptionsTable opts, Action<double> progressCallback);
 

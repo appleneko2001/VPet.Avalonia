@@ -1,31 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net7.0</TargetFramework>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-
     <ItemGroup>
       <PackageReference Include="Avalonia.Desktop" Version="11.2.6" />
-      <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.6" />
-      <PackageReference Include="X11" Version="1.0.6" />
+      <PackageReference Include="SkiaSharp" Version="3.116.1" />
     </ItemGroup>
-
 
     <ItemGroup>
       <ProjectReference Include="..\VPet.Avalonia\VPet.Avalonia.csproj" />
-
-
-
-
+      <ProjectReference Include="..\VPet.Avalonia.Providers.VPetSimulator\VPet.Avalonia.Providers.VPetSimulator.csproj" />
     </ItemGroup>
-
-
-
-
-
-
 
 </Project>

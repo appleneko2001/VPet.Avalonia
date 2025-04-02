@@ -1,3 +1,4 @@
+using VPet.Avalonia.Enums;
 using VPet.Avalonia.Systems.Graphics;
 using VPet.Avalonia.Systems.Graphics.Sprites;
 
@@ -13,4 +14,6 @@ public interface IGfxServiceInterface
     void CreateAnimationSequencesInfo(uint cacheSize);
     IEnumerable<SpriteSheetSequenceInfo> SearchSequences(Func<PetGfxInfo, bool> condition);
     void PreloadAllGfxSequences();
+
+    IEnumerable<GfxSequenceGroup> SearchSequenceGroup(Func<(PetActivityState, PetState, string?), bool> condition);
 }

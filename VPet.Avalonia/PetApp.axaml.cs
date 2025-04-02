@@ -21,6 +21,8 @@ public partial class PetApp : Application
     private IntPtr _widgetPointer;
     
     internal static string ApplicationRootPath { get; private set; }
+    internal static List<string> ModPackPathCollection { get; private set; } = new();
+    
     
     public PetApp()
     {
@@ -120,4 +122,6 @@ public partial class PetApp : Application
         
         _gameLogic.Init();
     }
+
+    public void AppendAdditionalModPackPath(string assetsPath) => ModPackPathCollection.Add(assetsPath);
 }

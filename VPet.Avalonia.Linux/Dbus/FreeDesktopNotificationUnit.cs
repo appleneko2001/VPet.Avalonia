@@ -20,7 +20,7 @@ public class FreeDesktopNotificationUnit
 
     private MessageBuffer Generate(Connection con, string appName, string title, string text, int timeoutMs = 10000)
     {
-        var hints = new Dictionary<string, string>();
+        var hints = new Dictionary<string, Variant>();
         using var writer = con.GetMessageWriter();
 
         writer.WriteMethodCallHeader(

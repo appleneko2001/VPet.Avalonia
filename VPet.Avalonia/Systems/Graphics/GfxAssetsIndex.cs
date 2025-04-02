@@ -9,9 +9,13 @@ public class GfxAssetsIndex
     protected void AddIndexInternal(PetGfxInfo key, string path)
     {
         if (Indexes.TryGetValue(key, out var found))
+        {
             this.WriteLine(MessageSeverity.Error, $"Unable to index GFX asset: The key is exist already ({key} -> {found})");
+            throw new ArgumentException();
+        }
         
         Indexes.Add(key, path);
+        Console.WriteLine(key);
     }
 
     public IEnumerable<string> GetAllAssetPaths() => Indexes.Values;

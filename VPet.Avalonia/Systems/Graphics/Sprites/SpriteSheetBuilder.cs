@@ -161,6 +161,8 @@ public class SpriteSheetBuilder : IDisposable
                     }
                 }
             }
+            
+            Marshal.FreeHGlobal(sourceBuf);
         }
         
         newBitmap.Save(oStream, 100);

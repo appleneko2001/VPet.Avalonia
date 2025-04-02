@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Media.Imaging;
+using VPet.Avalonia.Enums;
 using VPet.Avalonia.Extensions;
 using VPet.Avalonia.Modules;
 using VPet.Avalonia.Services.Interfaces;
@@ -19,15 +21,30 @@ public class VPetSimGfxService : IApplicationService, IGfxServiceInterface
     private readonly Dictionary<string, string> _cacheIndexes = new ();
     private readonly Dictionary<string, SpriteSheetSequenceInfo> _sequences = new();
     private readonly Dictionary<string, long> _usedBytesList = new();
+    private VPetSimModelInstance _model = null!;
 
     private string _assetsRootPath = string.Empty;
     
     public long TotalUsedBytes => _usedBytesList.Sum(a => a.Value);
     
+    public void Init(VPetSimModelInstance model)
+    {
+        _model = model;
+        var path = model.GfxAssetsPath!;
+        
+        _assetsRootPath = path;
+        
+        var indexer = new VPetSimGfxAssetsIndex(path);
+        indexer.AnalyseSequenceAutoGrouping();
+        
+        _gfxAssetsIndex = indexer;
+
+        //VPetSimGfxAssetsIndex.PrintAllUnsupportedAssetsListInternal();
+    }
+    
     public void Init(string baseAssetPath)
     {
-        _assetsRootPath = baseAssetPath;
-        _gfxAssetsIndex = new VPetSimGfxAssetsIndex(baseAssetPath);
+        throw new NotImplementedException();
     }
 
     public void CreateSpriteSheetCacheIfNotExists(string cacheFolder, uint cacheSize, Action<double>? progressCallback)
@@ -154,6 +171,7 @@ public class VPetSimGfxService : IApplicationService, IGfxServiceInterface
             a => new LazyBitmapInstance(() => new Bitmap(a)));
     }
 
+
     /// <summary>
     /// Preload all gfx sequences asset to memory and create Bitmap instance. <i><b>This will uses a lot RAM memory</b></i> for more faster performance.
     /// </summary>
@@ -204,6 +222,63 @@ public class VPetSimGfxService : IApplicationService, IGfxServiceInterface
         return _sequences
             .Where(a => assets?.Contains(a.Key) ?? false)
             .Select(a => a.Value);
+    }
+    
+    public IEnumerable<GfxSequenceGroup> SearchSequenceGroup(Func<(PetActivityState, PetState, string?), bool> condition)
+    {
+        var result = _gfxAssetsIndex!.GfxGroupedVariantDict
+            .Where(a => condition((a.Key.activity, a.Key.health, a.Key.tag)))
+            .Select(b =>
+            {
+                IReadOnlyList<PetGfxInfo>? aArray = null, bArray = null, cArray = null;
+                foreach (var pair in b.Value)
+                {
+                    switch (pair.Key)
+                    {
+                        case GfxAnimationType.Start:
+                            aArray = pair.Value;
+                            break;
+                        
+                        case GfxAnimationType.Loop:
+                            bArray = pair.Value;
+                            break;
+                        
+                        case GfxAnimationType.End:
+                            cArray = pair.Value;
+                            break;
+                        
+                        case GfxAnimationType.Single:
+                        default:
+                            throw new ArgumentException();
+                    }
+                }
+
+                if (aArray == null || bArray == null || cArray == null)
+                    throw new Exception("I HATE SPAGHETTI");
+
+                return new ValueTuple<(PetActivityState, PetState, string?), GfxSequenceGroup>(
+                    b.Key,
+                    new GfxSequenceGroup
+                    {
+                        FadeInPool = aArray
+                            .Select(a => SearchSequences(o => Equals(a, o)))
+                            .SelectMany(a => a)
+                            .ToImmutableArray(),
+                        WithinPool = bArray
+                            .Select(a => SearchSequences(o => Equals(a, o)))
+                            .SelectMany(a => a)
+                            .ToImmutableArray(),
+                        FadeOutPool = cArray
+                            .Select(a => SearchSequences(o => Equals(a, o)))
+                            .SelectMany(a => a)
+                            .ToImmutableArray()
+                    }
+                );
+            })
+            .ToImmutableArray();
+
+        return result.Select(a => a.Item2)
+            .ToImmutableArray();
     }
     
     private void CreateGraphicsCache_Sequence(string cacheFolder, string cacheName, string assetPath, uint cacheSize)
@@ -275,4 +350,6 @@ public class VPetSimGfxService : IApplicationService, IGfxServiceInterface
             pair.Value.Sprite?.Dispose();
         }
     }
+
+
 }

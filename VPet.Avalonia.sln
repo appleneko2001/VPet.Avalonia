@@ -8,6 +8,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPet.Avalonia.Test", "VPet.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPet.Avalonia.Providers.VPetSimulator", "VPet.Avalonia.Providers.VPetSimulator\VPet.Avalonia.Providers.VPetSimulator.csproj", "{2BB2C65E-6D84-42FF-AB20-9005C4F72BF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPet.Avalonia.Windows", "VPet.Avalonia.Windows\VPet.Avalonia.Windows.csproj", "{9C15493F-799D-41B6-A97D-287D78553590}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F86CCA82-AA26-422B-928E-2714B406F6CD} = {F86CCA82-AA26-422B-928E-2714B406F6CD}
+		{2BB2C65E-6D84-42FF-AB20-9005C4F72BF4} = {2BB2C65E-6D84-42FF-AB20-9005C4F72BF4}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,5 +34,9 @@ Global
 		{2BB2C65E-6D84-42FF-AB20-9005C4F72BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BB2C65E-6D84-42FF-AB20-9005C4F72BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BB2C65E-6D84-42FF-AB20-9005C4F72BF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C15493F-799D-41B6-A97D-287D78553590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C15493F-799D-41B6-A97D-287D78553590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C15493F-799D-41B6-A97D-287D78553590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C15493F-799D-41B6-A97D-287D78553590}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

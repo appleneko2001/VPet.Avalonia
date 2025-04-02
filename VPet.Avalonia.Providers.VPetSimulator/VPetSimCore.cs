@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using VPet.Avalonia.Interfaces;
 using VPet.Avalonia.Modules;
 using VPet.Avalonia.Options;
@@ -14,14 +16,16 @@ public class VPetSimCore : IModuleCore
     private string _rootPath;
     private VPetSimGfxService _gfxService;
     private VPetSimulatorAssetsProvider _assetsProvider;
+    private VPetSimLinePutScriptAdapter _scriptAdapter;
     
-    public void Initialise(string rootPath)
+    public void Initialise(string rootPath, IReadOnlyList<string> modPackPaths)
     {
         _rootPath = rootPath;
-        _assetsProvider = new VPetSimulatorAssetsProvider(rootPath);
-        _gfxService = new VPetSimGfxService();
+        _assetsProvider = new VPetSimulatorAssetsProvider(modPackPaths.First());
+        _assetsProvider.FetchModules();
         
-        _gfxService.Init(_assetsProvider.GfxAssetFolderPath);
+        _gfxService = new VPetSimGfxService();
+        _gfxService.Init(_assetsProvider.SelectPreferredModel() ?? throw new NullReferenceException("No available models. Be make sure you have installed modules with VPetSimulator models."));
     }
 
     public void InitAssets(OptionsTable opts, Action<double> progressCallback)

@@ -7,5 +7,6 @@ public enum InteractPetActionKind
     StartDrag,
     EndDrag,
     Talk,
-    Sleep
+    Sleep,
+    Action
 }

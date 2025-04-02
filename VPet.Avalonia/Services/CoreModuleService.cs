@@ -1,16 +1,11 @@
 using System.Collections.Immutable;
 using System.Reflection;
 using VPet.Avalonia.Debugging;
-using VPet.Avalonia.Extensions;
 using VPet.Avalonia.Modules;
 
-using System.Runtime.Loader;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
 using VPet.Avalonia.Interfaces;
 using VPet.Avalonia.Jsons;
-using VPet.Avalonia.Options;
 using VPet.Avalonia.Primitives;
 
 namespace VPet.Avalonia.Services;
@@ -25,19 +20,7 @@ public class CoreModuleService : IDisposable
     
     public CoreModuleService()
     {
-        try
-        {
-            _modulesPath = PetApp.ApplicationRootPath.GetPath("modules");
-        }
-        catch (DirectoryNotFoundException)
-        {
-            this.WriteLine(MessageSeverity.Info, "Seems like there does not exist the \"modules\" folder. Creating one...");
-            _modulesPath = Directory.CreateDirectory("modules").FullName;
-        }
-        catch (Exception e)
-        {
-            throw new AggregateException("Unable to instantiate the core module service!", e);
-        }
+        _modulesPath = PetApp.ApplicationRootPath;
         
         _currentDomain.AssemblyLoad += CurrentDomain_OnAssemblyLoad;
         _currentDomain.AssemblyResolve += CurrentDomain_OnAssemblyResolve;
@@ -68,7 +51,7 @@ public class CoreModuleService : IDisposable
         this.WriteLine(MessageSeverity.Info, $"Assembly \"{args.LoadedAssembly.FullName}\" is loaded.");
     }
 
-    public void LoadModules(string rootPath)
+    public void LoadModules(string rootPath, List<string> modPackPaths)
     {
         foreach (var fullPath in Directory.EnumerateFiles(_modulesPath))
         {
@@ -110,7 +93,7 @@ public class CoreModuleService : IDisposable
                 if (inst is not IModuleCore core)
                     throw new InvalidOperationException($"{fullPath} is not a valid core module.");
                 
-                core.Initialise(rootPath);
+                core.Initialise(rootPath, modPackPaths);
                 _loadedModules.Add(core);
             }
             catch (Exception e)

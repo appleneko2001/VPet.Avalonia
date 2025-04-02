@@ -1,3 +1,5 @@
+> NVM THIS SPAGHETTI IS TOO WEIRD I CANT DO MUCH WORK ANYMORE, AT LEAST IT WORKING PARTIALLY LIKE 10%
+
 # VPet.Avalonia
 A cross-platform virtual desktop pet application. Powered by avaloniaUI. Inspired by LorisYounger's VPet-Simulator.
 
@@ -35,7 +37,5 @@ directory, too.
 
 
 <!--
-For some reason i cant continue this work until i have back from important things done
-# FAQ (frequently asked questions)
-> TODO
+I LOVE SPAGHETTI
 -->
